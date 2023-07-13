@@ -5,6 +5,8 @@ import io.cursos.service.CursosService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,23 +47,24 @@ public class CursosResource {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createCursos(@RequestBody @Valid final CursosDTO cursosDTO) {
+    public ResponseEntity<String> createCursos(@RequestBody @Valid final CursosDTO cursosDTO) {
         final Long createdId = cursosService.create(cursosDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+        return new ResponseEntity<>("Curso creado", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateCursos(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<Map<String,String>> updateCursos(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final CursosDTO cursosDTO) {
         cursosService.update(id, cursosDTO);
-        return ResponseEntity.ok(id);
+        
+        return ResponseEntity.ok(Map.of("message", "Curso actualizado "));
     }
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteCursos(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<String> deleteCursos(@PathVariable(name = "id") final Long id) {
         cursosService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Curso eliminado");
     }
 
 }

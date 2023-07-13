@@ -5,6 +5,7 @@ import io.cursos.service.TemasService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,23 +48,23 @@ public class TemasResource {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createTemas(@RequestBody @Valid final TemasDTO temasDTO) {
+    public ResponseEntity<String> createTemas(@RequestBody @Valid final TemasDTO temasDTO) {
         final Long createdId = temasService.create(temasDTO);
-        return new ResponseEntity<>(createdId, HttpStatus.CREATED);
+        return new ResponseEntity<>("Tema creado", HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Long> updateTemas(@PathVariable(name = "id") final Long id,
+    public ResponseEntity<Map<String, String>> updateTemas(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final TemasDTO temasDTO) {
         temasService.update(id, temasDTO);
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(Map.of("message", "Tema actualizado"));
     }
 
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
-    public ResponseEntity<Void> deleteTemas(@PathVariable(name = "id") final Long id) {
+    public ResponseEntity<String> deleteTemas(@PathVariable(name = "id") final Long id) {
         temasService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("tema eliminado");
     }
 
 }
